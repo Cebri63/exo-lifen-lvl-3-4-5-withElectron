@@ -1,3 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Hind:300,400,500,600,700");
+
+.section1 {
+  font-family: "Hind", sans-serif;
+  color: #333;
+  background-image: url("./img/background-praticien-bureau.jpg");
+  background-size: cover;
+  user-select: none;
+  height: 100vh;
+  width: 100%;
+}
+
 .header {
   height: 80px;
   padding: 20px 0 0 20px;
@@ -8,16 +20,36 @@
 }
 
 .container {
-  width: 100vh;
-  height: 100vh;
-  margin: auto;
-  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 80px 80px 80px 30px;
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
+  float: left;
+}
+
+.title {
+  font-family: "Hind", sans-serif;
+  font-size: 31px;
+  line-height: 51px;
+  font-weight: 300;
+  block-size: 30px;
+  padding: 50px 0;
+}
+
+.welcome {
+  color: #ff6742;
+  font-weight: 500;
+}
+
+.vague-blanche {
+  z-index: 1;
+  position: relative;
+  max-width: none;
+  width: 120%;
+  margin-left: -10%;
 }
 
 .inputfile {
@@ -31,8 +63,9 @@
 
 .btn {
   border: none;
-  font-size: 1em;
-  font-weight: 600;
+  font-size: 13px;
+  line-height: 50px;
+  font-weight: 700;
   color: white;
   background-color: #ff6742;
   display: inline-block;
@@ -55,4 +88,58 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.fileName-X {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 200px;
+}
+
+.total-files {
+  height: 50px;
+  width: 50px;
+  padding: 10px;
+  background-color: gray;
+  border-radius: 50%;
+  font-size: 8px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-and-total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-times {
+  cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .vague-blanche {
+    top: 20px;
+  }
+}
+
+@media (max-width: 910px) {
+  .vague-blanche {
+    top: 40px;
+  }
+}
+
+@media (max-width: 620px) {
+  .vague-blanche {
+    top: 50px;
+  }
+}
+
+@media (max-width: 485px) {
+  .vague-blanche {
+    top: 60px;
+  }
 }

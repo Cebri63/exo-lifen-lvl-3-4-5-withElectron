@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
 
+import InputFile from "./components/InputFile";
+
+// var chokidar = require("chokidar");
+
 class App extends Component {
   state = {
     file: null,
@@ -9,13 +13,33 @@ class App extends Component {
     fileName: ""
   };
 
+  // componentDidMount = () => {
+  //   const watcher = chokidar.watch("./FHIR");
+  //   const log = console.log.bind(console);
+
+  //   watcher
+  //     .on("ready", () => log("Initial scan complete. Ready for changes"))
+  //     .on("add", path => log(`File ${path} has been added`))
+  //     .on("change", path => log(`File ${path} has been changed`))
+  //     .on("unlink", path => log(`File ${path} has been removed`));
+  // };
+
   handleFile = event => {
     let file = event.target.files[0];
+
     if (file) {
-      this.setState({ file: file, fileName: event.target.files[0].name });
-    } else {
-      this.setState({ file: null, fileName: "" });
+      let size = event.target.files[0].size;
+      if (size > 2097152) {
+        alert("Le fichier ne doit pas excéder 2Mo");
+        this.value = "";
+      } else {
+        this.setState({ file: file, fileName: event.target.files[0].name });
+      }
     }
+  };
+
+  handleCancel = () => {
+    this.setState({ file: null, fileName: "" });
   };
 
   handleUpload = () => {
@@ -40,38 +64,35 @@ class App extends Component {
   render() {
     return (
       <section>
-        <div className="header">
-          <img
-            className="logo"
-            src="https://www.lifen.fr/wp-content/themes/lifen_orange/images/lifen-orange.svg"
-            alt="logo"
-          />
-        </div>
-        <div className="container">
-          <div className="btn-choose-send">
-            <label className="btn" for="file">
-              Choisissez un fichier
-            </label>
-            <div>{this.state.fileName}</div>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              className="inputfile"
-              data-multiple-caption="{count} files selected"
-              multiple
-              onChange={this.handleFile}
+        <section className="section1">
+          <div className="header">
+            <img
+              className="logo"
+              src="https://www.lifen.fr/wp-content/themes/lifen_orange/images/lifen-orange.svg"
+              alt="logo"
             />
-            <button className="btn" onClick={this.handleUpload}>
-              Envoyer
-            </button>
           </div>
 
-          <label>
-            Nombre total de fichiers enregistrés :{" "}
-            {this.state.entry > 0 && this.state.entry}
-          </label>
-        </div>
+          <div className="container">
+            <div className="title">
+              <span className="welcome">Bienvenue </span>
+              sur la plateforme d'envoi de fichiers
+            </div>
+            <div className="input-and-total">
+              <InputFile
+                fileName={this.state.fileName}
+                handleCancel={this.handleCancel}
+                handleFile={this.handleFile}
+                handleUpload={this.handleUpload}
+              />
+
+              <div className="total-files">
+                Nb de fichiers dans le dossier :{" "}
+                {this.state.entry > 0 && this.state.entry}
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
     );
   }
