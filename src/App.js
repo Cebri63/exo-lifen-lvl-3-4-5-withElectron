@@ -4,25 +4,44 @@ import axios from "axios";
 
 import InputFile from "./components/InputFile";
 
-// var chokidar = require("chokidar");
+const chokidar = window.require("chokidar");
+const fs = window.require("fs");
 
 class App extends Component {
   state = {
     file: null,
     entry: 0,
-    fileName: ""
+    fileName: "",
+    path: ""
   };
 
-  // componentDidMount = () => {
-  //   const watcher = chokidar.watch("./FHIR");
-  //   const log = console.log.bind(console);
+  readFile = () => {
+    fs.readFile(".\\" + this.state.path, (err, data) => {
+      if (err) {
+        console.log("erreur : ", err);
+      }
+      console.log(data);
+    });
+  };
 
-  //   watcher
-  //     .on("ready", () => log("Initial scan complete. Ready for changes"))
-  //     .on("add", path => log(`File ${path} has been added`))
-  //     .on("change", path => log(`File ${path} has been changed`))
-  //     .on("unlink", path => log(`File ${path} has been removed`));
-  // };
+  componentDidMount = () => {
+    const watcher = chokidar.watch("src\\FHIR");
+    const log = console.log.bind(console);
+
+    watcher
+      .on("ready", () => log("Initial scan complete. Ready for changes"))
+      .on("add", path => {
+        log(`File ${path} has been added`);
+
+        this.setState({ path: path }, () => {
+          console.log("State Path : ", ".\\" + this.state.path);
+          this.readFile();
+        });
+      })
+
+      .on("change", path => log(`File ${path} has been changed`))
+      .on("unlink", path => log(`File ${path} has been removed`));
+  };
 
   handleFile = event => {
     let file = event.target.files[0];
@@ -52,9 +71,11 @@ class App extends Component {
       .post("https://fhirtest.uhn.ca/baseDstu3/Binary", data)
       .then(response => {
         alert("Fichier envoyé avec succés");
-        axios.get("https://fhirtest.uhn.ca/baseDstu3/Binary").then(response => {
-          this.setState({ entry: response.data.entry.length });
-        });
+        axios
+          .get("http://hapi.fhir.org/baseDstu3/Binary?_summary=count")
+          .then(response => {
+            this.setState({ entry: response.data.total, fileName: "" });
+          });
       })
       .catch(error => {
         alert("Une erreure est survenue, veuillez recommencer");
